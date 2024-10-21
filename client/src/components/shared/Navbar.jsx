@@ -56,7 +56,7 @@ const Navbar = () => {
               </svg>
             </button>
             <NavLink to="/" className="flex items-center">
-              <p className="text-2xl font-bold text-white">Duber</p>
+              <p className="text-2xl font-bold text-white">Block Ride</p>
             </NavLink>
           </div>
 
