@@ -153,7 +153,6 @@ const Banner = () => {
                   </svg>
                 </div>
                 <div className="ml-2 w-full">
-                  {" "}
                   <GooglePlacesAutocomplete
                     selectProps={{
                       end,

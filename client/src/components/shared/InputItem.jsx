@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState, useEffect, useContext } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { SourceContext } from "../../context/SourceContext";
@@ -82,5 +83,5 @@ function InputItem({ type }) {
 export default InputItem;
 
 InputItem.propTypes = {
-  type: String,
+  type: PropTypes.string,
 };
