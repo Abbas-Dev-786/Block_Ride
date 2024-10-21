@@ -7,9 +7,6 @@ import { useState } from "react";
 import { SourceContext } from "./context/SourceContext";
 import { DestinationContext } from "./context/DestinationContext";
 import NotificationSettings from "./routes/NotificationSettings";
-import { useReadContract } from "wagmi";
-import abi from "./abi/contract.abi.json";
-import { CONTRACT_ADDRESS } from "./constant";
 import DriverRegister from "./routes/DriverRegister";
 import Notification from "./components/shared/Notification";
 import RiderTrips from "./routes/RiderTrips";
@@ -18,15 +15,6 @@ import DriverTrips from "./routes/DriverTrips";
 const App = () => {
   const [source, setSource] = useState([]);
   const [destination, setdestination] = useState([]);
-
-  const result = useReadContract({
-    abi,
-    address: CONTRACT_ADDRESS,
-    functionName: "tripCounter",
-    args: [],
-  });
-
-  console.log(result, "🥳");
 
   return (
     <SourceContext.Provider value={{ source, setSource }}>
