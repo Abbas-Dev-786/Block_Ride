@@ -1,9 +1,9 @@
 import { toast } from "react-toastify";
 import { useReadContract } from "wagmi";
-import abi from "./../abi/contract.abi.json";
+import abi from "../abi/contract.abi.json";
 import { CONTRACT_ADDRESS } from "../constant";
 
-const RiderTrips = () => {
+const Trips = () => {
   const { data, error, isLoading, isError } = useReadContract({
     abi,
     address: CONTRACT_ADDRESS,
@@ -125,4 +125,4 @@ const RiderTrips = () => {
   );
 };
 
-export default RiderTrips;
+export default Trips;

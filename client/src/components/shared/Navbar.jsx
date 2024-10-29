@@ -6,7 +6,7 @@ import { useAccount } from "wagmi";
 
 const NAV_LINKS = [
   { text: "Book a Ride", link: "/book-ride", showOnConnected: false },
-  { text: "My Trips", link: "/rider/trips", showOnConnected: true },
+  { text: "My Trips", link: "/trips", showOnConnected: true },
   {
     text: "Notifications",
     link: "/notifications",
