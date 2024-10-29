@@ -26,20 +26,6 @@ function CarListOption({ distance }) {
   const { destination } = useContext(DestinationContext);
   const navigate = useNavigate();
 
-  // Prepare the contract write with necessary arguments
-  // const { config } = usePrepareContractWrite({
-  //   address: contractAddress,
-  //   abi: contractABI,
-  //   functionName: 'createRide',
-  //   args: [sourceCoordinates, destinationCoordinates],
-  //   overrides: {
-  //     value: ethers.utils.parseEther(fareInEther), // Send fare as msg.value
-  //   },
-  // });
-
-  // // Execute the transaction
-  // const { data, isLoading, isSuccess, write } = useContractWrite(config);
-
   const {
     data: hash,
     isPending,
