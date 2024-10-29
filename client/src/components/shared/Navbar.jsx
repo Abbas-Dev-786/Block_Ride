@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useAccount } from "wagmi";
+import { useAccount, useReadContract } from "wagmi";
+import { CONTRACT_ADDRESS } from "../../constant";
+import abi from "../../abi/contract.abi.json";
 
 const NAV_LINKS = [
   { text: "Book a Ride", link: "/book-ride", showOnConnected: false },
@@ -17,8 +19,15 @@ const NAV_LINKS = [
 ];
 
 const Navbar = () => {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const [isOpen, setOpen] = useState(false);
+
+  const { data: driverData } = useReadContract({
+    abi,
+    address: CONTRACT_ADDRESS,
+    functionName: "drivers",
+    args: [address],
+  });
 
   return (
     <header>
@@ -95,6 +104,21 @@ const Navbar = () => {
                   </NavLink>
                 </li>
               ))}
+
+              {driverData?.[0] && (
+                <li onClick={() => setOpen(false)}>
+                  <NavLink
+                    to={"/driver-panel"}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "capitalize block py-2 pr-4 pl-3 text-white font-bold rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
+                        : "capitalize block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                    }
+                  >
+                    Driver Panel
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
         </div>
