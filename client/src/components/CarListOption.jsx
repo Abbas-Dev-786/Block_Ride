@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Description,
   Dialog,
@@ -8,30 +8,46 @@ import {
 import CarListItem from "./CarListItem";
 import { CarListData } from "../data/data";
 import driverAnimation from "./../assets/driver-animation.mp4";
-import { CONTRACT_ADDRESS } from "../constant";
-import abi from "./../abi/contract.abi.json";
-import { useWriteContract } from "wagmi";
-import { SourceContext } from "../context/SourceContext";
-import { DestinationContext } from "../context/DestinationContext";
+// import { CONTRACT_ADDRESS } from "../constant";
+// import abi from "./../abi/contract.abi.json";
+import { useWriteContract, useAccount } from "wagmi";
+// import { SourceContext } from "../context/SourceContext";
+// import { DestinationContext } from "../context/DestinationContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 function CarListOption({ distance }) {
+  const { isConnected } = useAccount();
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState();
   const [selectedCar, setSelectedCar] = useState();
-  const { source } = useContext(SourceContext);
-  const { destination } = useContext(DestinationContext);
+  // const { source } = useContext(SourceContext);
+  // const { destination } = useContext(DestinationContext);
   const navigate = useNavigate();
 
   const data = useWriteContract();
-  const { data: hash, isPending, writeContract, isSuccess } = data;
+  const { data: hash, isPending, isSuccess } = data;
+
+  const handleRideRequestBtnClick = () => {
+    if (!isConnected) {
+      toast.error("Please Login to book the ride");
+      return;
+    }
+
+    setIsOpen(true);
+    // writeContract({
+    //   abi,
+    //   address: CONTRACT_ADDRESS,
+    //   functionName: "createTrip",
+    //   args: [source.name, destination.name],
+    // });
+  };
 
   useEffect(() => {
     if (hash && isSuccess) {
       toast.success("ride booking successfull");
       setIsOpen(false);
-      navigate("/");
+      navigate("/trips");
     }
   }, [isSuccess, hash]);
 
@@ -58,15 +74,7 @@ function CarListOption({ distance }) {
           </p>
           <button
             className="p-3 bg-black text-white rounded-lg text-center"
-            onClick={() => {
-              setIsOpen(true);
-              writeContract({
-                abi,
-                address: CONTRACT_ADDRESS,
-                functionName: "createTrip",
-                args: [source.name, destination.name],
-              });
-            }}
+            onClick={handleRideRequestBtnClick}
           >
             Request {selectedCar.name}
           </button>
