@@ -7,7 +7,7 @@ const Trips = () => {
   const { data, error, isLoading, isError } = useReadContract({
     abi,
     address: CONTRACT_ADDRESS,
-    functionName: "getRiderTrips",
+    functionName: "getMyTrips",
   });
 
   if (isLoading) {
@@ -20,6 +20,13 @@ const Trips = () => {
 
   if (isError) {
     toast.error(error.shortMessage);
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <h2 className="text-center text-red-500 font-semibold">
+          Error:- {error.shortMessage}
+        </h2>
+      </div>
+    );
   }
 
   if (!data) {
