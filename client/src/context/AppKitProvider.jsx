@@ -53,7 +53,7 @@ initWeb3InboxClient({
   projectId,
   domain: appDomain,
   allApps: true,
-  logLevel: "info",
+  logLevel: "error",
   // allApps: import.meta.env.MODE !== "production",
 });
 
