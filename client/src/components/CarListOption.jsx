@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Description,
   Dialog,
@@ -8,25 +8,46 @@ import {
 import CarListItem from "./CarListItem";
 import { CarListData } from "../data/data";
 import driverAnimation from "./../assets/driver-animation.mp4";
-// import { CONTRACT_ADDRESS } from "../constant";
-// import abi from "./../abi/contract.abi.json";
-import { useWriteContract, useAccount } from "wagmi";
-// import { SourceContext } from "../context/SourceContext";
-// import { DestinationContext } from "../context/DestinationContext";
+import { CONTRACT_ADDRESS } from "../constant";
+import abi from "./../abi/contract.abi.json";
+import { useWriteContract, useAccount, useBalance } from "wagmi";
+import { SourceContext } from "../context/SourceContext";
+import { DestinationContext } from "../context/DestinationContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 function CarListOption({ distance }) {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
+  const { data } = useBalance({ address });
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState();
   const [selectedCar, setSelectedCar] = useState();
-  // const { source } = useContext(SourceContext);
-  // const { destination } = useContext(DestinationContext);
+  const { source } = useContext(SourceContext);
+  const { destination } = useContext(DestinationContext);
   const navigate = useNavigate();
 
-  const data = useWriteContract();
-  const { data: hash, isPending, isSuccess } = data;
+  // Prepare the contract write with necessary arguments
+  // const { config } = usePrepareContractWrite({
+  //   address: contractAddress,
+  //   abi: contractABI,
+  //   functionName: 'createRide',
+  //   args: [sourceCoordinates, destinationCoordinates],
+  //   overrides: {
+  //     value: ethers.utils.parseEther(fareInEther), // Send fare as msg.value
+  //   },
+  // });
+
+  // // Execute the transaction
+  // const { data, isLoading, isSuccess, write } = useContractWrite(config);
+
+  const {
+    data: hash,
+    isPending,
+    isSuccess,
+    writeContract,
+    error,
+    isError,
+  } = useWriteContract();
 
   const handleRideRequestBtnClick = () => {
     if (!isConnected) {
@@ -34,13 +55,23 @@ function CarListOption({ distance }) {
       return;
     }
 
+    if (!data || data?.value === 0n) {
+      toast.error("Insuffient funds");
+      return;
+    }
+
     setIsOpen(true);
-    // writeContract({
-    //   abi,
-    //   address: CONTRACT_ADDRESS,
-    //   functionName: "createTrip",
-    //   args: [source.name, destination.name],
-    // });
+    writeContract({
+      abi,
+      value: 1,
+      // value: (selectedCar.amount * distance).toFixed(2),
+      address: CONTRACT_ADDRESS,
+      functionName: "createRide",
+      args: [
+        [Math.round(source.lat * 1e6), Math.round(source.lng * 1e6)],
+        [Math.round(destination.lat * 1e6), Math.round(destination.lng * 1e6)],
+      ],
+    });
   };
 
   useEffect(() => {
@@ -49,7 +80,15 @@ function CarListOption({ distance }) {
       setIsOpen(false);
       navigate("/trips");
     }
+
+    // eslint-disable-next-line
   }, [isSuccess, hash]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error?.message || "Something went wrong");
+    }
+  }, [isError, error]);
 
   return (
     <div className="mt-5 overflow-auto h-[500px]">
