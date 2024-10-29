@@ -1,22 +1,26 @@
 # 🚗 Decentralized Ride Sharing Platform
 
-A full-stack decentralized ride-sharing application built with Ethereum smart contracts, QuickNode infrastructure, and modern web technologies.
+A decentralized ride-sharing platform that connects riders and drivers without the need for a middleman. Built during the [HackathonName] Hackathon to revolutionize transportation by utilizing blockchain for secure and trustless payments.
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
+- [Features](#features)
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
+- [Challenges](#challenges)
 - [QuickNode Setup](#quicknode-setup)
 - [Frontend Setup](#frontend-setup)
 - [License](#license)
 
-## 🌟 Overview
+## 🌟 Features
 
-This project implements a complete decentralized ride-sharing platform using Ethereum smart contracts for payment escrow, QuickNode for blockchain infrastructure, and a modern web stack for the user interface.
+- **Decentralized Payment**: Payments are processed securely via smart contracts.
+- **Driver and Rider Matching**: Efficient matching system to connect drivers and riders.
+- **Fare Calculation**: Automatic fare calculation based on distance.
+- **Hybrid Model**: Combines decentralized technology with a centralized UX for best performance.
 
 ## 🏗 Architecture
 
@@ -101,6 +105,10 @@ graph TB
 - MetaMask or Web3 Wallet
 - Yarn or npm
 
+## 📖 Challenges
+- Integrating QuickNode's Streams and Functions for real-time data was challenging.
+- Designing a seamless UX while maintaining decentralized principles required a hybrid model.
+
 ## 🛠 Installation
 
 1. Clone the repository:
@@ -169,15 +177,6 @@ REACT_APP_QUICKNODE_RPC_URL=your_quicknode_rpc_url
 ```bash
 yarn workspace frontend dev
 ```
-
-## 🔐 Security
-
-- Smart contract security measures
-- Rate limiting on API endpoints
-- JWT authentication
-- Input validation
-- Data encryption
-- WebSocket security
 
 ## 📄 License
 
