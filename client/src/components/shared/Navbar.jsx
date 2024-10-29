@@ -62,7 +62,7 @@ const Navbar = () => {
 
           {/* Action buttons */}
           <div className="flex items-center lg:order-2">
-            <w3m-button label="Login / Register" />
+            <w3m-button label="Login / Register" size="sm" />
           </div>
 
           {/* nav links */}

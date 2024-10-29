@@ -39,8 +39,8 @@ const config = defaultWagmiConfig({
 
 // 3. Create modal
 createWeb3Modal({
-  metadata,
   wagmiConfig: config,
+  metadata,
   projectId,
   enableSwaps: true,
   enableOnramp: true,
