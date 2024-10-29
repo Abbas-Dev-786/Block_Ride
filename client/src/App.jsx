@@ -10,7 +10,7 @@ import NotificationSettings from "./routes/NotificationSettings";
 import DriverRegister from "./routes/DriverRegister";
 import Notification from "./components/shared/Notification";
 import RiderTrips from "./routes/RiderTrips";
-import DriverTrips from "./routes/DriverTrips";
+// import DriverTrips from "./routes/DriverTrips";
 
 const App = () => {
   const [source, setSource] = useState([]);
@@ -25,10 +25,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/book-ride" element={<RideBookingPage />} />{" "}
-          <Route
-            path="/notification-settings"
-            element={<NotificationSettings />}
-          />
+          <Route path="/notifications" element={<NotificationSettings />} />
           <Route path="/driver-register" element={<DriverRegister />} />{" "}
           <Route path="/rider/trips" element={<RiderTrips />} />{" "}
           {/* <Route path="/driver/trips" element={<DriverTrips />} /> */}

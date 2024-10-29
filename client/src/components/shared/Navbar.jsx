@@ -2,16 +2,22 @@
 
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useAccount } from "wagmi";
 
 const NAV_LINKS = [
-  { text: "Book a Ride", link: "/book-ride" },
-  { text: "My Trips", link: "/rider/trips" },
-  { text: "Notifications", link: "/notification-settings" },
-  { text: "Become a Driver", link: "/driver-register" },
+  { text: "Book a Ride", link: "/book-ride", showOnConnected: false },
+  { text: "My Trips", link: "/rider/trips", showOnConnected: true },
+  {
+    text: "Notifications",
+    link: "/notifications",
+    showOnConnected: true,
+  },
+  { text: "Become a Driver", link: "/driver-register", showOnConnected: true },
   // { text: "Driver Trips", link: "/driver/trips" },
 ];
 
 const Navbar = () => {
+  const { isConnected } = useAccount();
   const [isOpen, setOpen] = useState(false);
 
   return (
@@ -73,7 +79,9 @@ const Navbar = () => {
             id="mobile-menu-2"
           >
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-              {NAV_LINKS.map(({ text, link }) => (
+              {NAV_LINKS.filter((link) =>
+                link.showOnConnected === false ? true : isConnected
+              ).map(({ text, link }) => (
                 <li key={text} onClick={() => setOpen(false)}>
                   <NavLink
                     to={link}
