@@ -107,7 +107,7 @@ function CarListOption({ distance }) {
       ) : null}
 
       <Dialog
-        open={isOpen && !isPending}
+        open={isOpen || isPending}
         onClose={() => {
           setIsOpen(false);
         }}
