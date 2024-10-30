@@ -131,57 +131,6 @@ yarn install
 yarn workspaces run install
 ```
 
-## ⚡ QuickNode Setup
-
-### 1. RPC Endpoint Setup
-
-```javascript
-// config/quicknode.js
-const QUICKNODE_RPC_URL = process.env.QUICKNODE_RPC_URL;
-const provider = new ethers.providers.JsonRpcProvider(QUICKNODE_RPC_URL);
-```
-
-### 2. Streams Configuration
-
-```javascript
-// services/streams.js
-const initializeStreams = async () => {
-  const stream = new QuickNode.Stream({
-    networkType: 'ethereum',
-    projectId: process.env.QUICKNODE_PROJECT_ID,
-    streamName: 'ride-events'
-  });
-
-  stream.addAddress({
-    address: FACTORY_CONTRACT_ADDRESS,
-    events: ['RideCreated', 'RideCompleted']
-  });
-};
-```
-
-### 3. Functions Implementation
-
-```javascript
-// functions/rideMatcher.js
-export async function matchRide(ride) {
-  const drivers = await getNearbyDrivers(ride.location);
-  return optimizeMatch(drivers, ride);
-}
-```
-
-## 🎨 Frontend Setup
-
-1. Configure environment:
-```env
-REACT_APP_API_URL=http://localhost:3001
-REACT_APP_QUICKNODE_RPC_URL=your_quicknode_rpc_url
-```
-
-2. Start the development server:
-```bash
-yarn workspace frontend dev
-```
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
