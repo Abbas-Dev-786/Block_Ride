@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAccount, useReadContract } from "wagmi";
 import abi from "../abi/contract.abi.json";
-import { CONTRACT_ADDRESS } from "../constant";
+import { CONTRACT_ADDRESS, RIDE_STATUS } from "../constant";
 
 // Example ride notifications
 const notifications = [
@@ -24,9 +24,23 @@ const DriverPanel = () => {
     args: [address],
   });
 
-  const handleRejectBtnClick = () => {};
+  const { data: rideStatus } = useReadContract({
+    abi,
+    address: CONTRACT_ADDRESS,
+    functionName: "getRideStatus",
+    args: [0],
+    // args: [rideId],
+  });
+
+  const handleRejectBtnClick = () => {
+    const ride = JSON.parse(localStorage.getItem("rejected-rides"));
+    // ride.push(rideId);
+    localStorage.setItem("rejected-rides", JSON.stringify(ride));
+  };
 
   const handleAcceptBtnClick = () => {};
+
+  const handleCompleteBtnClick = () => {};
 
   if (!isConnected) {
     toast.error("You are not login");
@@ -78,18 +92,35 @@ const DriverPanel = () => {
           >
             <span className="text-gray-800">{notification.details}</span>
             <div className="flex flex-col md:flex-row items-start justify-end md:justify-between flex-wrap gap-4">
-              <button
-                className="bg-green-500 text-white px-3 py-1 rounded mr-2"
-                onClick={handleAcceptBtnClick}
-              >
-                Accept
-              </button>
-              <button
-                className="bg-red-500 text-white px-3 py-1 rounded"
-                onClick={handleRejectBtnClick}
-              >
-                Reject
-              </button>
+              {RIDE_STATUS[rideStatus] === RIDE_STATUS[0] && (
+                <>
+                  <button
+                    className="bg-green-500 text-white px-3 py-1 rounded mr-2"
+                    onClick={handleAcceptBtnClick}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-3 py-1 rounded"
+                    onClick={handleRejectBtnClick}
+                  >
+                    Reject
+                  </button>
+                </>
+              )}
+
+              {RIDE_STATUS[rideStatus] === RIDE_STATUS[1] && (
+                <button
+                  className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
+                  onClick={handleCompleteBtnClick}
+                >
+                  Complete Ride
+                </button>
+              )}
+
+              {RIDE_STATUS[rideStatus] === RIDE_STATUS[3] && (
+                <p>Ride is Already completed</p>
+              )}
             </div>
           </div>
         ))}
