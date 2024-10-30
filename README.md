@@ -11,8 +11,6 @@ A decentralized ride-sharing platform that connects riders and drivers without t
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Challenges](#challenges)
-- [QuickNode Setup](#quicknode-setup)
-- [Frontend Setup](#frontend-setup)
 - [License](#license)
 
 ## 🌟 Features
@@ -25,25 +23,31 @@ A decentralized ride-sharing platform that connects riders and drivers without t
 ## 🏗 Architecture
 
 ```mermaid
-graph TB
-    subgraph Frontend
-        UI[React UI] --> Redux[State Management]
-        Redux --> Web3[Web3 Integration]
-    end
+sequenceDiagram
+    participant R as Rider
+    participant D as Driver
+    participant SC as Smart Contract
+    participant QS as QuickNode Streams
+    participant QF as QuickNode Functions
+    participant DB as Database
+
+    R->>SC: createRideRequest(pickup, destination, price)
+    Note over SC: Emits RideRequestCreated event
+    SC-->>R: Request ID
+
+    QS->>QS: Monitor RideRequestCreated events
+    QS->>QF: Trigger matchRideRequest function
     
-    subgraph Backend
-        API[Supabase API] --> QNF[QuickNode Functions]
-        API --> DB[Database]
-        QNF --> QNS[QuickNode Streams]
-    end
+    QF->>DB: Store ride details
+    QF->>QF: Find nearby available drivers
+    QF->>D: Send ride notification
     
-    subgraph Blockchain
-        SC[Smart Contracts] --> QN[QuickNode RPC]
-        QN --> QNS
-    end
+    D->>SC: acceptRideRequest(requestId)
+    Note over SC: Emits RideAccepted event
     
-    Web3 --> API
-    Web3 --> SC
+    QS->>QS: Monitor RideAccepted event
+    QS->>QF: Trigger rideStartProcess
+    QF->>R: Notify rider of match
 ```
 
 ## 💻 Tech Stack
