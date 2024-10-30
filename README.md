@@ -2,6 +2,8 @@
 
 A decentralized ride-sharing platform that connects riders and drivers without the need for a middleman. Built during the BuildOn Hackathon by QuickNode to revolutionize transportation by utilizing blockchain for secure and trustless payments.
 
+![MochiMochimochiGIF (2)](https://github.com/user-attachments/assets/facb2478-167a-42b3-985d-143b7ce1dbbc)
+
 ## 📋 Table of Contents
 
 - [Features](#features)
