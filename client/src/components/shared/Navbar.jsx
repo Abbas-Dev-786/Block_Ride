@@ -9,11 +9,11 @@ import abi from "../../abi/contract.abi.json";
 const NAV_LINKS = [
   { text: "Book a Ride", link: "/book-ride", showOnConnected: false },
   { text: "My Trips", link: "/trips", showOnConnected: true },
-  {
-    text: "Notifications",
-    link: "/notifications",
-    showOnConnected: true,
-  },
+  // {
+  //   text: "Notifications",
+  //   link: "/notifications",
+  //   showOnConnected: true,
+  // },
   { text: "Become a Driver", link: "/driver-register", showOnConnected: true },
   // { text: "Driver Trips", link: "/driver/trips" },
 ];
