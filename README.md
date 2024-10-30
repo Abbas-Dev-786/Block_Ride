@@ -1,6 +1,6 @@
 # 🚗 Decentralized Ride Sharing Platform
 
-A decentralized ride-sharing platform that connects riders and drivers without the need for a middleman. Built during the [HackathonName] Hackathon to revolutionize transportation by utilizing blockchain for secure and trustless payments.
+A decentralized ride-sharing platform that connects riders and drivers without the need for a middleman. Built during the BuildOn Hackathon by QuickNode to revolutionize transportation by utilizing blockchain for secure and trustless payments.
 
 ## 📋 Table of Contents
 
@@ -75,7 +75,6 @@ sequenceDiagram
 
 ### Smart Contract Features
 - Secure escrow system for ride payments
-- Factory pattern for multiple escrow instances
 - Platform fee integration
 - Role-based access control
 
