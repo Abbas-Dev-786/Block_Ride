@@ -1,8 +1,9 @@
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAccount, useReadContract } from "wagmi";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import abi from "../abi/contract.abi.json";
 import { CONTRACT_ADDRESS, RIDE_STATUS } from "../constant";
+import { useEffect } from "react";
 
 // Example ride notifications
 const notifications = [
@@ -24,6 +25,13 @@ const DriverPanel = () => {
     args: [address],
   });
 
+  const {
+    isSuccess,
+    writeContract,
+    error: mutationError,
+    isError: isMutationError,
+  } = useWriteContract();
+
   const { data: rideStatus } = useReadContract({
     abi,
     address: CONTRACT_ADDRESS,
@@ -32,15 +40,50 @@ const DriverPanel = () => {
     // args: [rideId],
   });
 
-  const handleRejectBtnClick = () => {
+  const handleRejectBtnClick = (id) => {
     const ride = JSON.parse(localStorage.getItem("rejected-rides"));
     // ride.push(rideId);
     localStorage.setItem("rejected-rides", JSON.stringify(ride));
+
+    writeContract({
+      abi,
+      address: CONTRACT_ADDRESS,
+      functionName: "cancelRide",
+      args: [id],
+    });
   };
 
-  const handleAcceptBtnClick = () => {};
+  const handleAcceptBtnClick = (id) => {
+    console.log("hello");
+    writeContract({
+      abi,
+      address: CONTRACT_ADDRESS,
+      functionName: "acceptRide",
+      args: [id],
+    });
+  };
 
-  const handleCompleteBtnClick = () => {};
+  const handleCompleteBtnClick = (id) => {
+    writeContract({
+      abi,
+      address: CONTRACT_ADDRESS,
+      functionName: "completetRide",
+      args: [id],
+    });
+  };
+
+  useEffect(() => {
+    if (isMutationError) {
+      console.log(mutationError);
+      toast.error(mutationError.shortMessage || mutationError.message);
+    }
+  }, [isMutationError, mutationError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Ride Status updated Successfully");
+    }
+  }, [isSuccess]);
 
   if (!isConnected) {
     toast.error("You are not login");
@@ -85,7 +128,7 @@ const DriverPanel = () => {
       {/* Ride Notifications Section */}
       <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-xl">
         <h2 className="text-xl font-semibold mb-4">Ride Notifications</h2>
-        {notifications.map((notification) => (
+        {notifications.map((notification, i) => (
           <div
             key={notification.id}
             className="flex justify-between items-center mb-4"
@@ -96,13 +139,13 @@ const DriverPanel = () => {
                 <>
                   <button
                     className="bg-green-500 text-white px-3 py-1 rounded mr-2"
-                    onClick={handleAcceptBtnClick}
+                    onClick={() => handleAcceptBtnClick(i)}
                   >
                     Accept
                   </button>
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded"
-                    onClick={handleRejectBtnClick}
+                    onClick={() => handleRejectBtnClick(i)}
                   >
                     Reject
                   </button>
@@ -112,7 +155,7 @@ const DriverPanel = () => {
               {RIDE_STATUS[rideStatus] === RIDE_STATUS[1] && (
                 <button
                   className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
-                  onClick={handleCompleteBtnClick}
+                  onClick={() => handleCompleteBtnClick(i)}
                 >
                   Complete Ride
                 </button>
