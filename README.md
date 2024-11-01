@@ -28,28 +28,48 @@ A decentralized ride-sharing platform that connects riders and drivers without t
 sequenceDiagram
     participant R as Rider
     participant D as Driver
-    participant SC as Smart Contract
-    participant QS as QuickNode Streams
+    participant UI as Frontend
     participant QF as QuickNode Functions
-    participant DB as Database
+    participant QS as QuickNode Streams
+    participant SC as Smart Contracts
+    participant DB as Cache/Storage
 
-    R->>SC: createRideRequest(pickup, destination, price)
-    Note over SC: Emits RideRequestCreated event
-    SC-->>R: Request ID
-
-    QS->>QS: Monitor RideRequestCreated events
-    QS->>QF: Trigger matchRideRequest function
-    
+    %% Ride Request Flow
+    Note over R,SC: 1. Ride Request Flow
+    R->>UI: Request Ride
+    UI->>QF: Trigger ride request function
     QF->>DB: Store ride details
-    QF->>QF: Find nearby available drivers
-    QF->>D: Send ride notification
-    
-    D->>SC: acceptRideRequest(requestId)
-    Note over SC: Emits RideAccepted event
-    
-    QS->>QS: Monitor RideAccepted event
-    QS->>QF: Trigger rideStartProcess
-    QF->>R: Notify rider of match
+    QF->>SC: Create ride request
+    SC-->>QS: Emit RideRequested event
+    QS->>QF: Trigger driver matching function
+    QF->>D: Notify nearby drivers
+
+    %% Ride Acceptance Flow
+    Note over D,SC: 2. Ride Acceptance Flow
+    D->>UI: Accept ride
+    UI->>QF: Process acceptance
+    QF->>SC: Update ride status
+    SC-->>QS: Emit RideAccepted event
+    QS->>QF: Trigger ride start function
+    QF->>R: Notify rider
+    QF->>DB: Update ride status
+
+    %% Ride Progress Flow
+    Note over R,DB: 3. Ride Progress Flow
+    D->>UI: Update location
+    UI->>QF: Process location update
+    QF->>DB: Store location
+    QF->>R: Send real-time updates
+
+    %% Ride Completion Flow
+    Note over D,SC: 4. Ride Completion Flow
+    D->>UI: Complete ride
+    UI->>QF: Process completion
+    QF->>SC: Trigger payment
+    SC-->>QS: Emit PaymentComplete event
+    QS->>QF: Trigger completion function
+    QF->>DB: Update ride status
+    QF->>R: Request rating
 ```
 
 ## 💻 Tech Stack
